@@ -1,17 +1,14 @@
-import asyncio
-from rtcbot import CVCamera, CVDisplay
 import cv2
 
-camera = CVCamera()
-display = CVDisplay()
+captura = cv2.VideoCapture(0)
 
-@camera.subscribe
-def onFrame(frame):
-    bwframe = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    display.put_nowait(bwframe)
+while(not cv2.waitKey(20) & 0xFF == ord('q')):
+    ret, frame = captura.read()
+    cv2.imshow("Video", frame)
+   
+    k = cv2.waitKey(30) & 0xff
+    if k == 27:
+        break
 
-try:
-    asyncio.get_event_loop().run_forever()
-finally:
-    camera.close()
-    display.close()
+captura.release()
+cv2.destroyAllWindows()
